@@ -19,10 +19,12 @@ const audioStop = new Audio('./sonidos/beep.mp3');
 const musica = new Audio('./sonidos/luna-rise-part-one.mp3');
     musica.loop = true;
 
-let tiempoTranscurrido = 5;
+const tiempoEnPantalla = document.querySelector('#timer');
+let tiempoTranscurrido = 1500;
 let idIntervalo = null;
 
 function cambiarModo(modo){
+    mostrarTiempo();
     botones.forEach(function(modo){
         modo.classList.remove(`active`)
     })
@@ -48,16 +50,19 @@ function cambiarModo(modo){
 }
 
 botonCorto.addEventListener('click', () => {
+    tiempoTranscurrido = 300;
     cambiarModo('descanso-corto');
     botonCorto.classList.add('active');
 })
 
 botonEnfoque.addEventListener('click', () => {
+    tiempoTranscurrido = 1500;
     cambiarModo('enfoque');
     botonEnfoque.classList.add('active');
 })
 
 botonLargo.addEventListener('click', () => {
+    tiempoTranscurrido = 900;
     cambiarModo('descanso-largo');
     botonLargo.classList.add('active');
 })
@@ -79,7 +84,7 @@ const cuentaRegresiva = () => {
     iconoBotonInicio.setAttribute('src','./imagenes/pause.png');
     textoBotonInicio.textContent = "Pausar";
     tiempoTranscurrido -= 1;
-    console.log("temporizador:" + tiempoTranscurrido);
+    mostrarTiempo ();
 }
 
 function iniciarPausar(){
@@ -101,3 +106,11 @@ function reiniciar(){
 }
 
 botonInicio.addEventListener('click', iniciarPausar);
+
+function mostrarTiempo () {
+    const tiempo = new Date(tiempoTranscurrido*1000);
+    const tiempoFormateado = tiempo.toLocaleTimeString('es-MX',{minute:'2-digit',second:'2-digit'});
+    tiempoEnPantalla.innerHTML = `${tiempoFormateado}`;
+}
+
+mostrarTiempo();
